@@ -31,12 +31,13 @@ java -jar ProductDownload/ProductDownload.jar \
  --aws \
  --startdate $startdate \
  --enddate $enddate \
- --out $L1Czip \
+ --out "$L1C" \
  --store AWS \
  --cloudpercentage $maxcloud \
  --user $ESA_USERNAME \
  --password $ESA_PASSWORD \
- --verbose
+ --verbose \
+ --unpacked
 
 #
 # --aws \

@@ -24,21 +24,32 @@ fi
 
 echo $startdate
 
-java -jar ProductDownload/ProductDownload.jar \
+# seems not to work for 2017 so query-> results.txt
+java -jar ProductDownload/ProductDownload.jar $2 \
  --mode RESUME \
  --sensor S2 \
- -a "$area" \
  --aws \
+ -a $area \
  --startdate $startdate \
  --enddate $enddate \
  --out "$L1C" \
- --store AWS \
  --cloudpercentage $maxcloud \
  --user $ESA_USERNAME \
  --password $ESA_PASSWORD \
  --verbose \
- --unpacked
+ --store AWS \
+ --q
 
+#--unpacked
 #
 # --aws \
 #  --input $L1Cfolder \
+
+
+#cat $L1C/results.txt | while read product
+#do
+#   echo $product # do something with $line here
+#   #sentinelhub.aws --product $product -f $L1C -e -t
+#done
+
+#sentinelhub.aws --product S2A_OPER_PRD_MSIL1C_PDMC_20160908T083647_R022_V20160906T101022_20160906T101558 -f . -e

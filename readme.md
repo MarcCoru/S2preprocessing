@@ -14,24 +14,54 @@ project emerged from thesis repository
 ## Installation
 
 clone repository
-```
-git clone git@gitlab.lrz.de:ga73yox/preprocessing.git
-sh setup.sh
+```bash
+$git clone git@gitlab.lrz.de:ga73yox/preprocessing.git
+$sh setup.sh
 ```
 
 ## Pipeline
 
-### Deletion of granules outside of AOI
+##### Query available products from Amazon Web Service (AWS)
 
-```
-sh query.sh ./bavaria.cfg
-```
-
-delete unnecessary granules (for faster sen2cor) -d flag for dry run
-```
-python delGranules.py ./test.cfg -d
+```bash
+$sh query.sh sites/munich.cfg
 ```
 
+creates ```results.txt``` containing product names
+
+##### Download products from results.txt
+
+```bash
+$sh download.sh sites/munich.cfg
 ```
-sh sen2cor.sh ./test.cfg
+
+##### Optional: Delete unnecessary tiles to reduce file size and processing time
+
+```bash
+$python delGranules.py sites/munich.cfg
 ```
+
+Dry run flag ```-d``` only simulates deletion
+
+```bash
+ $python delGranules.py sites/munich.cfg -d
+ ```
+
+
+the config file must include a ```granules``` variable
+e.g.
+```bash
+granules="32UPU 32UQU 33UTP 33UUP"
+```
+
+[Here](https://mappingsupport.com/p/coordinates-mgrs-google-maps.html) is an online tool to determine Granules
+
+##### Atmospheric correction with Sen2Cor
+
+```bash
+$sh sen2cor.sh sites/munich.cfg
+```
+
+The Sentinel 2 atomspheric correction config file ```L2A_GIPP.xml``` is by
+default stored in the project root directory.
+However, the location can be changed in the config file using the ```L2A_GIPP_path``` variable

@@ -6,17 +6,17 @@
 
 # download product downloader if not exists
 if [ ! -f ProductDownload/ProductDownload.jar ]; then
-  sh setup.sh
+    sh setup.sh
 fi
 
 # Assertions
 if [ -z "$1" ]; then
-  echo "No config file provided! Aborting"
-  exit 1
+    echo "No config file provided! Aborting"
+    exit 1
 fi
 if [ ! -f $1 ]; then
-  echo "Config file $1 not found! Aborting"
-  exit 1
+    echo "Config file $1 not found! Aborting"
+    exit 1
 fi
 
 # read configs
@@ -26,19 +26,17 @@ echo $startdate
 
 # seems not to work for 2017 so query-> results.txt
 java -jar ProductDownload/ProductDownload.jar $2 \
- --mode RESUME \
- --sensor S2 \
- --aws \
- -a $area \
- --startdate $startdate \
- --enddate $enddate \
- --out "$L1C" \
- --cloudpercentage $maxcloud \
- --user $ESA_USERNAME \
- --password $ESA_PASSWORD \
- --verbose \
- --store AWS \
- --q
+--mode RESUME \
+--sensor S2 \
+--aws \
+-a $area \
+--startdate $startdate \
+--enddate $enddate \
+--out "$path" \
+--cloudpercentage $maxcloud \
+--verbose \
+--store AWS \
+--q
 
 #--unpacked
 #

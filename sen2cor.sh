@@ -27,5 +27,5 @@ do
 done
 
 # delete folders of unsuccessfull processes (but leave log files)
-sh sen2cordeletefails.sh $1
+#sh sen2cordeletefails.sh $1
 

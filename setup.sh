@@ -16,4 +16,4 @@ bash Sen2Cor-2.4.0-Linux64.run
 rm Sen2Cor-2.4.0-Linux64.run
 
 # create anaconda environment with latest GDAL 2.2.1
-conda create -c conda-forge --prefix ./conda python=2.7 pip gdal
+conda create -y -c conda-forge --prefix ./conda python=2.7 pip gdal

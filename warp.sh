@@ -17,21 +17,34 @@ else
 fi
 #statements
 
+# default output directory to path if not defined
+if [ -z "$tifpath" ]; then
+    tifpath=$path
+fi
+
+# should be installed there by setup.sh
 gdalwarp="conda/bin/gdalwarp"
 
-# for every line in the results file
-cat $path/results.txt | while read p
+# for every line in the results file $path/results.txt
+while read p;
 do
-    
+
     # select product name
     if [ "$level" = "L1C" ]; then
         product=$p
     elif [ "$level" = "L2A" ]; then
+        # predict L2A product name
         product=$(echo $p | sed 's/MSIL1C/MSIL2A/g' | sed 's/OPER/USER/g' )
     fi
-    
+
     echo $product
-    
-    file=$(ls $path/$product.SAFE/MTD*.xml)
-    $gdalwarp -of GTiff -crop_to_cutline -cutline $cutline "$gdalS2prefix:$file:10m:$srs" "$path/$product"_10m.tif
-done
+
+    # find product's main xml file:
+    #  -> list directory filter by regex, return first match
+    file=$(ls $path/$product.SAFE | grep -E -m 1 "(S2.*xml|MTD.*xml)")
+
+    $gdalwarp -of GTiff -crop_to_cutline -cutline $cutline "$gdalS2prefix:$path/$product.SAFE/$file:10m:$srs" "$tifpath/$product"_10m.tif
+    $gdalwarp -of GTiff -crop_to_cutline -cutline $cutline "$gdalS2prefix:$path/$product.SAFE/$file:20m:$srs" "$tifpath/$product"_20m.tif
+    $gdalwarp -of GTiff -crop_to_cutline -cutline $cutline "$gdalS2prefix:$path/$product.SAFE/$file:60m:$srs" "$tifpath/$product"_60m.tif
+
+done <$path/results.txt

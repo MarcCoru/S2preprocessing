@@ -24,7 +24,7 @@ $sh setup.sh
 ##### Query available products from Amazon Web Service (AWS)
 
 ```bash
-$sh query.sh sites/munich.cfg
+$sh query.sh sites/munich.site
 ```
 
 creates ```results.txt``` containing product names
@@ -32,19 +32,19 @@ creates ```results.txt``` containing product names
 ##### Download products from results.txt
 
 ```bash
-$sh download.sh sites/munich.cfg
+$sh download.sh sites/munich.site
 ```
 
 ##### Optional: Delete unnecessary tiles to reduce file size and processing time
 
 ```bash
-$python delGranules.py sites/munich.cfg
+$python delGranules.py sites/munich.site
 ```
 
 Dry run flag ```-d``` only simulates deletion
 
 ```bash
- $python delGranules.py sites/munich.cfg -d
+ $python delGranules.py sites/munich.site -d
  ```
 
 
@@ -59,7 +59,7 @@ granules="32UPU 32UQU 33UTP 33UUP"
 ##### Atmospheric correction with Sen2Cor
 
 ```bash
-$sh sen2cor.sh sites/munich.cfg
+$sh sen2cor.sh sites/munich.site
 ```
 
 The Sentinel 2 atomspheric correction config file ```L2A_GIPP.xml``` is by

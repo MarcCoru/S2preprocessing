@@ -4,7 +4,7 @@
 # python preprocessing/download/geojson2aoi.py data/bavaria/shp/aoi.geojson
 area="11.5314854866,48.289743953 12.1866587382,48.2897751466 12.1866300812,48.558659954 11.5314562298,48.5586286318 11.5314854866,48.289743953"
 
-project="$HOME/projects/thesis"
+project="$HOME/projects/preprocessing"
 
 granules="32UPU 32UQU 33UTP 33UUP"
 
@@ -16,5 +16,7 @@ query=$project/data/bavaria/query
 #L1C=$project/data/bavaria/data/L1C
 path=$project/data/bavaria/data/L1C
 
-TIFfolder=$project/data/bavaria/tif
+# warp
+#tifpath=$path
+cutline=$project/sites/bavaria.geojson
 srs=EPSG_32632

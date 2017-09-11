@@ -24,7 +24,7 @@ fi
 
 echo $startdate
 
-# seems not to work for 2017 so query-> results.txt
+# seems not to work for 2017 so query-> $queryfile
 java -jar ProductDownload/ProductDownload.jar $2 \
 --mode RESUME \
 --sensor S2 \
@@ -38,13 +38,16 @@ java -jar ProductDownload/ProductDownload.jar $2 \
 --store AWS \
 --q
 
+# rename $queryfile to queryfile name
+mv $path/results.txt $path/$queryfile
+
 #--unpacked
 #
 # --aws \
 #  --input $L1Cfolder \
 
 
-#cat $L1C/results.txt | while read product
+#cat $L1C/$queryfile | while read product
 #do
 #   echo $product # do something with $line here
 #   #sentinelhub.aws --product $product -f $L1C -e -t

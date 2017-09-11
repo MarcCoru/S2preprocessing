@@ -27,9 +27,9 @@ $sh setup.sh
 $sh query.sh sites/munich.site
 ```
 
-creates ```results.txt``` containing product names
+creates ```$queryfile``` containing product names
 
-##### Download products from results.txt
+##### Download products from $queryfile
 
 ```bash
 $sh download.sh sites/munich.site

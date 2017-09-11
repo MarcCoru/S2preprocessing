@@ -4,9 +4,9 @@
 # read configs
 . $1
 
-cat $path/results.txt | while read product
+cat $path/$queryfile | while read product
 do
-    
+
     if [ ! -d $path/$product.SAFE ]; then
         echo "downloading product: "$product
         sentinelhub.aws --product $product -f $path -e -t

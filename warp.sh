@@ -25,7 +25,7 @@ fi
 # should be installed there by setup.sh
 gdalwarp="conda/bin/gdalwarp"
 
-# for every line in the results file $path/results.txt
+# for every line in the results file $path/$queryfile
 while read p;
 do
 
@@ -47,4 +47,4 @@ do
     $gdalwarp -of GTiff -crop_to_cutline -cutline $cutline "$gdalS2prefix:$path/$product.SAFE/$file:20m:$srs" "$tifpath/$product"_20m.tif
     $gdalwarp -of GTiff -crop_to_cutline -cutline $cutline "$gdalS2prefix:$path/$product.SAFE/$file:60m:$srs" "$tifpath/$product"_60m.tif
 
-done <$path/results.txt
+done <$path/$queryfile

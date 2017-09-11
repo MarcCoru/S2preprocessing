@@ -10,6 +10,7 @@ configdir=$(dirname "$0") # this directory
 #area=$(python $configdir/geojson2aoi.py $project/sites/munich.geojson)
 area="11.524285797,48.1845387572 11.5249725608,48.1845387902 11.5249724871,48.1852256095 11.5242857233,48.1852255765 11.524285797,48.1845387572"
 
+queryfile=munich.query
 # relevant granules (others will be deleted to save processing time)
 granules="32UPU 32UQU 33UTP 33UUP"
 

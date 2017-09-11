@@ -2,21 +2,21 @@
 
 # obtained via
 # python preprocessing/download/geojson2aoi.py data/bavaria/shp/aoi.geojson
-area="12.2142368059,48.5911876629 12.1905302768,48.2139231883 10.81837963,48.2438316204 10.8319097901,48.6214929716 12.2142368059,48.5911876629"
+area="12.2142368059,48.5911876629 12.2113888618,48.5462769878 12.1166861433,48.5488821657 12.1194504397,48.593796933 12.1194504397,48.593796933"
 
 project="$HOME/projects/preprocessing"
 
-granules="32UPU 32UQU 33UTP 33UUP"
+granules="33UTP 33UUP"
 
 maxcloud=50
 startdate="2016-01-01"
 enddate="2017-09-11"
-queryfile=bavaria.query
+queryfile=bavariasmall.query
 #L1C=$project/data/bavaria/data/L1Czip
 #L1C=$project/data/bavaria/data/L1C
 path=$project/data/bavaria/data/L1C
 
 # warp
-#tifpath=$path
-cutline=$project/sites/bavaria.geojson
+tifpath=$project/data/bavaria/small
+cutline=$project/sites/bavariasmall.geojson
 srs=EPSG_32632

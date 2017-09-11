@@ -16,13 +16,13 @@ if [ -z "$L2A_GIPP_path" ]; then
 fi
 
 # for every line in the results file
-cat $path/results.txt | while read product
+cat $path/$queryfile | while read product
 do
-    
+
     L2Aproductname=$(echo $product | sed 's/MSIL1C/MSIL2A/g' | sed 's/OPER/USER/g' )
-    
+
     echo $L2Aproductname
-    
+
     if [ -d $path/$L2Aproductname.SAFE ]; then # target folder exists
         echo "skipping product: "$product
     else # do sen2cor process in different threads

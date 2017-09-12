@@ -20,3 +20,10 @@ path=$project/data/bavaria/data/L1C
 #tifpath=$path
 cutline=$project/sites/bavaria.geojson
 srs=EPSG_32632
+
+# upload
+dbhost="dbserver"
+dbase="fields"
+dbtable="test"
+dbuser=$POSTGIS_USER
+dbpassword=$POSTGIS_PASSWORD

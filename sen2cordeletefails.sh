@@ -11,7 +11,7 @@ cat $path/$queryfile | while read product
 do
     # skip if already exists
     L2Aproductname=$(echo $product | sed 's/MSIL1C/MSIL2A/g' | sed 's/OPER/USER/g' )
-    echo $L2Aproductname
+    echo "checking: $L2Aproductname"
 
     # skip if no logfile exists
     if [ ! -f "$path/$L2Aproductname.sen2cor" ]
@@ -23,9 +23,9 @@ do
     #echo $lastlog
     # if last logging entry does not indicate success
     if [ "$lastlog" != "$sucess" ]; then
-
         # delete folder if still exists
-        echo removing $L2Aproductname.SAFE
-        rm -fr $path/$L2Aproductname.SAFE
+        echo "detected failed $L2Aproductname.SAFE"
+        echo $lastlog
+        rm -ifr $path/$L2Aproductname.SAFE
     fi
 done

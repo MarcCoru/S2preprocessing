@@ -4,6 +4,7 @@ import sys
 from configobj import ConfigObj
 import pandas as pd
 import re
+import datetime
 
 if len(sys.argv) < 2:
     print "No config file provided! Aborting"
@@ -34,20 +35,47 @@ doy is NULL or
 date is NULL or
 level is NULL or
 sat is NULL or
-tile is NULL or
 type is NULL
 """.format(cfg['dbtable'])
 
 # old format: e.g.
 #S2A_USER_PRD_MSIL2A_PDMC_20160831T224638_R065_V20160830T102022_20160830T102052
-S2oldformat=".{3}_.{4}_.{3}_.{6}_.{4}_.{15}_.{4}_.{16}_.{16}.*"
+#S2oldformat=".{3}_.{4}_.{3}_.{6}_.{4}_.{15}_.{4}_.{16}_.{16}.*"
 
 # new format: e.g.
 # S2A_MSIL1C_20170616T102021_N0205_R065_T32UQV_20170616T102331_60m.tif
-S2newformat=".{3}_.{6}_.{15}_.{5}_.{4}_.{6}_.{15}.*"
+#S2newformat=".{3}_.{6}_.{15}_.{5}_.{4}_.{6}_.{15}.*"
 
 rs = pd.read_sql(sql, conn)
-#cur = conn.cursor()conda
-for f in rs["filename"]:
 
-    print f
+cur = conn.cursor()
+for filename in rs["filename"]:
+    print filename
+    sat=re.search(r"S2A|S2B",filename).group(0)
+    level=re.search(r"L1C|L2A",filename).group(0)
+    datestr=re.search(r"_[0-9]{8}T",filename).group(0)[1:-1] # remove "_" and "T"
+    date=datetime.datetime.strptime(datestr,"%Y%m%d")
+    doy=date.timetuple().tm_yday
+    year=date.year
+    stype=re.search(r"(.{3})\.tif",filename).group(1)
+
+    print "parsed: sat {}, level {}, date {}, doy {}, year {}, type {} from {}".format(sat,level,date.date(),doy,year,stype,filename)
+
+    updatesql="""
+    update {}
+    set
+        sat=%s,
+        level=%s,
+        date=%s,
+        doy=%s,
+        year=%s,
+        type=%s
+    where
+        filename='{}';
+    """.format(cfg['dbtable'],filename)
+
+    cur.execute(updatesql, (sat,level,date,doy,year,stype))
+
+conn.commit()
+cur.close()
+conn.close()

@@ -23,6 +23,7 @@ source activate conda
 
 pip install psycopg2
 pip install pandas
+pip install shapely
 source deactivate
 
 if [[ $EUID -ne 0 ]]; then

@@ -27,3 +27,5 @@ dbase="fields"
 dbtable="bavariasmall"
 dbuser=$POSTGIS_USER
 dbpassword=$POSTGIS_PASSWORD
+
+# tilegrid

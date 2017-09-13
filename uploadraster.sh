@@ -24,7 +24,7 @@ psql="psql -d $dbase --username=russwurm --host=$dbhost"
 #files="data/bavaria/test/S2A_OPER_PRD_MSIL1C_PDMC_20160522T182438_R065_V20160522T102029_20160522T102029_10m.tif"
 
 # query already present products
-productsindb=$($psql -c "Select distinct filename from bavariasmall")
+productsindb=$($psql -c "Select distinct filename from $dbtable")
 
 
 echo $psql

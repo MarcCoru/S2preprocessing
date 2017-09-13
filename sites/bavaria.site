@@ -17,13 +17,13 @@ queryfile=bavaria.query
 path=$project/data/bavaria/data/L1C
 
 # warp
-#tifpath=$path
+tifpath=$project/data/bavaria/tif
 cutline=$project/sites/bavaria.geojson
 srs=EPSG_32632
 
 # upload
 dbhost="dbserver"
 dbase="fields"
-dbtable="test"
+dbtable="bavaria"
 dbuser=$POSTGIS_USER
 dbpassword=$POSTGIS_PASSWORD

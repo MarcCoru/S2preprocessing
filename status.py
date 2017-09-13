@@ -29,8 +29,8 @@ print "site: {}".format(cfg_path)
 
 if not os.path.exists(os.path.join(path,queryfile)):
     print "No query $queryfile available"
-    print "run '$shj query.sh {}' to query for available products".format(cfg_path)
-
+    print "run '$sh query.sh {}' to query for available products".format(cfg_path)
+    sys.exit()
 
 with open(os.path.join(path,queryfile)) as f:
     queriedproducts = f.readlines()

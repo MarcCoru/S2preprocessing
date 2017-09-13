@@ -16,7 +16,14 @@ queryfile=bavariasmall.query
 #L1C=$project/data/bavaria/data/L1C
 path=$project/data/bavaria/data/L1C
 
-# warp
+# warp/home/russwurm/projects/preprocessing/uploadraster.sh
 tifpath=$project/data/bavaria/small
 cutline=$project/sites/bavariasmall.geojson
 srs=EPSG_32632
+
+# upload
+dbhost="dbserver"
+dbase="fields"
+dbtable="bavariasmall"
+dbuser=$POSTGIS_USER
+dbpassword=$POSTGIS_PASSWORD

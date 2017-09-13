@@ -22,7 +22,7 @@ conda create -y -c conda-forge bkreider --prefix ./conda python=2.7 pip gdal pos
 source activate conda
 
 pip install psycopg2
-
+pip install pandas
 source deactivate
 
 if [[ $EUID -ne 0 ]]; then

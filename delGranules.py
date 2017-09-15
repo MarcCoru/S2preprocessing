@@ -39,7 +39,8 @@ for product in os.listdir(path):
         continue
     nproducts+=1
 
-    granules = os.listdir(os.path.join(path,product,"GRANULE"))
+    if os.path.exists(os.path.join(path,product,"GRANULE")):
+        granules = os.listdir(os.path.join(path,product,"GRANULE"))
 
     # for every granule in product
     for granule in granules:
@@ -47,7 +48,7 @@ for product in os.listdir(path):
         #skip if not folder
         if os.path.isfile(os.path.join(path,product,"GRANULE",granule)):
             continue
-        
+
         ngranules+=1
 
         # if not matches required Granules
@@ -60,4 +61,3 @@ for product in os.listdir(path):
 
 print
 print "SUMMARY: {} products inspected, {} granules checked, {} deleted, {} kept".format(nproducts,ngranules,ngrdeleted,ngrkept)
-

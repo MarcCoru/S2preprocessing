@@ -1,20 +1,16 @@
 #!/bin/bash
 
-if [ -z "$1" ]
+if [ "$1"="--help" ] || [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -z "$4" ]
   then
-    echo "No config file provided! Aborting"
+    echo "uploads all raster specified in the site file to the database table"
+    echo ""
+    echo "bash uploadraster.sh sites/bavaria.site L1C"
     exit 1
 fi
 
 # read configs
 . $1
 
-if [ -z "$2" ]
-  then
-    echo "please specify level ('L1C' or 'L2A') as second argument"
-    echo "e.g. \$bash uploadraster.sh demo.site L1C"
-    exit 0
-fi
 # either L1C or L2A
 level=$2
 

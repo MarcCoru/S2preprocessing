@@ -65,3 +65,15 @@ $sh sen2cor.sh sites/munich.site
 The Sentinel 2 atomspheric correction config file ```L2A_GIPP.xml``` is by
 default stored in the project root directory.
 However, the location can be changed in the config file using the ```L2A_GIPP_path``` variable
+
+## DB
+
+Add a "is evaluate" column to a polygon dataset
+```bash
+sh addEvalField.sh sites/bavaria.site tiles eval "0.8" ""
+```
+
+Add a "is train" column to a polygon dataset (eval=1 are excluded)
+```bash
+sh addEvalField.sh sites/bavaria.site tiles train "0.75" "where eval=0"
+```

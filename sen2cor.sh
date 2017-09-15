@@ -23,8 +23,10 @@ do
 
     echo $L2Aproductname
 
+    if [ ! -d $path/$product.SAFE ]; then # target folder exists
+        echo "source product $product does not exist -> skipping"
     if [ -d $path/$L2Aproductname.SAFE ]; then # target folder exists
-        echo "skipping product: "$product
+        echo "target product: $L2Aproductname already exists -> skipping"
     else # do sen2cor process in different threads
         echo "sen2cor: "$product" -> "$L2Aproductname
         $L2AProcess $path/$product.SAFE --GIP_L2A $L2A_GIPP_path > $path/$L2Aproductname.sen2cor

@@ -8,7 +8,7 @@ project="$HOME/projects/preprocessing"
 
 granules="32UPU 32UQU 33UTP 33UUP"
 
-maxcloud=50
+maxcloud=80
 startdate="2016-01-01"
 enddate="2017-09-11"
 queryfile=bavaria.query

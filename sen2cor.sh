@@ -25,7 +25,7 @@ do
 
     if [ ! -d $path/$product.SAFE ]; then # target folder exists
         echo "source product $product does not exist -> skipping"
-    if [ -d $path/$L2Aproductname.SAFE ]; then # target folder exists
+    elif [ -d $path/$L2Aproductname.SAFE ]; then # target folder exists
         echo "target product: $L2Aproductname already exists -> skipping"
     else # do sen2cor process in different threads
         echo "sen2cor: "$product" -> "$L2Aproductname

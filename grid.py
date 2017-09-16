@@ -12,8 +12,8 @@ parser = argparse.ArgumentParser(description='created a grid in a database based
 parser.add_argument('site', help='config file for specified site')
 parser.add_argument('geojson', help="geojson file, which provides extent of AOI")
 parser.add_argument('tablename', help="database tablename")
-parser.add_argument('--tilesize', default=3000, help="Size of tiles in meter. Defaults to 3000m")
-parser.add_argument('--margin', default=0, help="size of margin between tiles in meter")
+parser.add_argument('--tilesize', default=3000, type=int,help="Size of tiles in meter. Defaults to 3000m")
+parser.add_argument('--margin', default=0, type=int,help="size of margin between tiles in meter")
 args = parser.parse_args()
 
 cfg_path=args.site
@@ -49,7 +49,7 @@ rand = np.random.rand()
 
 table_name = args.tablename
 
-point_distance = args.tilesize - args.margin#m
+point_distance = args.tilesize#m
 offset = point_distance/2
 
 commit_every = 1000
@@ -67,13 +67,15 @@ x_grid = range(x_min+offset, x_max, point_distance)
 y_grid = range(y_min+offset, y_max, point_distance)
 n_points = len(x_grid)*len(y_grid)
 
+boxoffset=offset-args.margin/2
+
 count = 0
 for x in x_grid:
     for y in y_grid:
         count += 1
         center = Point(x, y)
 
-        geom = box(x-offset, y-offset, x+offset, y+offset)
+        geom = box(x-boxoffset, y-boxoffset, x+boxoffset, y+boxoffset)
 
         insert_sql = """
             INSERT INTO {0}(geom)

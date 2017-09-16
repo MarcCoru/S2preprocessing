@@ -24,10 +24,12 @@ source activate conda
 pip install psycopg2
 pip install pandas
 pip install shapely
+pip install numpy
+
 source deactivate
 
 if [[ $EUID -ne 0 ]]; then
-   echo "Skipping installation of postgis (required for upload.sh), no root permissions" 
+   echo "Skipping installation of postgis (required for upload.sh), no root permissions"
    exit 1
 fi
 # database tools (raster2pgsql)

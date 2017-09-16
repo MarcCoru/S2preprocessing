@@ -25,6 +25,21 @@ setdefault('dbase','fields')
 setdefault('dbtable','test')
 
 conn = psycopg2.connect('postgres://{}:{}@{}/{}'.format(os.environ["POSTGIS_USER"],os.environ["POSTGIS_PASSWORD"],cfg['dbhost'],cfg['dbase']))
+cur = conn.cursor()
+
+# needs to be executed while no other process accesses table...
+if True:
+    # create attributes if not exists
+    sql="""
+    ALTER TABLE {0} ADD COLUMN IF NOT EXISTS year integer;
+    ALTER TABLE {0} ADD COLUMN IF NOT EXISTS doy integer;
+    ALTER TABLE {0} ADD COLUMN IF NOT EXISTS date date;
+    ALTER TABLE {0} ADD COLUMN IF NOT EXISTS level varchar(5);
+    ALTER TABLE {0} ADD COLUMN IF NOT EXISTS sat varchar(5);
+    ALTER TABLE {0} ADD COLUMN IF NOT EXISTS type varchar(5);
+    """.format(cfg['dbtable'])
+    cur.execute(sql)
+    conn.commit()
 
 # select filenames, which lack meta values
 sql="""
@@ -48,7 +63,6 @@ type is NULL
 
 rs = pd.read_sql(sql, conn)
 
-cur = conn.cursor()
 for filename in rs["filename"]:
     print filename
     sat=re.search(r"S2A|S2B",filename).group(0)

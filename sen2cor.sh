@@ -12,7 +12,7 @@ L2AProcess="Sen2Cor-2.4.0-Linux64/bin/L2A_Process"
 
 # default to project root config file if not set
 if [ -z "$L2A_GIPP_path" ]; then
-    L2A_GIPP_path=$project/L2A_GIPP.xml
+    L2A_GIPP_path=$project/cfg/L2A_GIPP.xml
 fi
 
 # for every line in the results file

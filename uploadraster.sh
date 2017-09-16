@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "$1"="--help" ] || [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -z "$4" ]
+if [ ! "$1"="--help" ] || [ -z "$1" ] || [ -z "$2" ];
   then
     echo "uploads all raster specified in the site file to the database table"
     echo ""
@@ -16,6 +16,15 @@ level=$2
 
 # database connection
 psql="psql -d $dbase --username=russwurm --host=$dbhost"
+
+# check if table already exists
+if $psql -lqt | cut -d \| -f 1 | grep -qw $dbtable; then
+    appendflag=""
+else
+    appendflag="-a"
+fi
+# database exists
+    # $? is 0
 
 #files="data/bavaria/test/S2A_OPER_PRD_MSIL1C_PDMC_20160522T182438_R065_V20160522T102029_20160522T102029_10m.tif"
 
@@ -42,7 +51,7 @@ do
       continue
     fi
     echo "loading $p to database"
-    raster2pgsql -s $srs -I -C -M $tifpath/$p*.tif -F -t 100x100 $dbtable | $psql
+    raster2pgsql -s $srs $appendflag -I -P -C -M $tifpath/$p*.tif -F -t $tilesize"x"$tilesize $dbtable | $psql
 done <$path/$queryfile
 # type := 10m, 20m, 60m or SCL
 

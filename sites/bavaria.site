@@ -27,3 +27,4 @@ dbase="fields"
 dbtable="bavaria"
 dbuser=$POSTGIS_USER
 dbpassword=$POSTGIS_PASSWORD
+tilesize=120

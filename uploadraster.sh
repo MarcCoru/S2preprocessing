@@ -41,18 +41,18 @@ do
     if [ "$level" = "L1C" ]; then
         product=$p
     elif [ "$level" = "L2A" ]; then
-     # predict L2A product name
-      product=$(echo $p | sed 's/MSIL1C/MSIL2A/g' | sed 's/OPER/USER/g' )
+        # predict L2A product name
+        product=$(echo $p | sed 's/MSIL1C/MSIL2A/g' | sed 's/OPER/USER/g' )
     fi
 
     # query if filename does not already exists
     #echo $filename
-    if [[ "$productsindb" == *"$p"* ]] ; then
+    if [[ "$productsindb" == *"$product"* ]] ; then
       echo "product $p already in database table $dbtable. skipping..."
       continue
     fi
     echo "loading $p to database"
-    raster2pgsql -s $srs $appendflag -I -P -C -M $tifpath/$p*.tif -F -t $tilesize"x"$tilesize $dbtable | $psql
+    raster2pgsql -s $srs $appendflag -I -P -C -M $tifpath/$product*.tif -F -t $tilesize"x"$tilesize $dbtable | $psql
 done <$path/$queryfile
 # type := 10m, 20m, 60m or SCL
 

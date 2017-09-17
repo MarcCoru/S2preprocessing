@@ -31,3 +31,5 @@ dbpassword=$POSTGIS_PASSWORD
 # tilegrid
 trainvalidevaltable="tiles"
 footpringtable="footprints"
+
+tilesize=120

@@ -18,11 +18,12 @@ level=$2
 psql="psql -d $dbase --username=russwurm --host=$dbhost"
 
 # check if table already exists
-if $psql -lqt | cut -d \| -f 1 | grep -qw $dbtable; then
-    appendflag=""
-else
+if [ $( $psql -tAc "SELECT 1 FROM pg_tables where tablename='$dbtable'" ) = '1' ]; then
     appendflag="-a"
+else
+    appendflag=""
 fi
+
 # database exists
     # $? is 0
 

@@ -19,9 +19,10 @@ psql="psql -d $dbase --username=russwurm --host=$dbhost"
 
 # check if table already exists
 if [ $( $psql -tAc "SELECT 1 FROM pg_tables where tablename='$dbtable'" ) = '1' ]; then
+    echo "appending to DB"
     appendflag="-a"
 else
-    appendflag=""
+    appendflag="-I" # first insert should also create an index
 fi
 
 # database exists
@@ -47,12 +48,12 @@ do
 
     # query if filename does not already exists
     #echo $filename
-    if [[ "$productsindb" == *"$product"* ]] ; then
+    if [[ "$productsindb" = *"$product"* ]] ; then
       echo "product $p already in database table $dbtable. skipping..."
       continue
     fi
     echo "loading $p to database"
-    raster2pgsql -s $srs $appendflag -I -P -C -M $tifpath/$product*.tif -F -t $tilesize"x"$tilesize $dbtable | $psql
+    raster2pgsql -s $srs $appendflag -P -C -M $tifpath/$product*.tif -F -t $tilesize"x"$tilesize $dbtable | $psql
 done <$path/$queryfile
 # type := 10m, 20m, 60m or SCL
 

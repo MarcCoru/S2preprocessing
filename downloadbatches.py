@@ -63,7 +63,7 @@ def main():
     tileids = ids.values
     for tileid in tileids:
         print "{} downloading Tile {}".format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), tileid)
-        download_tile(conn, level, rastertable, tiletable, outfolder, tileid,True)
+        download_tile(conn, level, rastertable, tiletable, outfolder, tileid,False)
 
 
 def download_tile(conn, level, rastertable, tiletable, outfolder, tileid, verbose=False):
@@ -95,12 +95,20 @@ def download_tile(conn, level, rastertable, tiletable, outfolder, tileid, verbos
 
         if verbose: print date
 
-        labels=queryLabel(conn, tiletable, tileid)
+        try:
+            labels=queryLabel(conn, tiletable, tileid)
 
-        raster=[]
-        for rtype in ["10m","20m","60m"]:
-            allbands = bandcfg[level][rtype]
-            raster.append(queryRaster(conn, rastertable, tiletable, tileid, date, rtype, level, toidx(allbands)))
+            raster=[]
+            for rtype in ["10m","20m","60m"]:
+                allbands = bandcfg[level][rtype]
+                raster.append(queryRaster(conn, rastertable, tiletable, tileid, date, rtype, level, toidx(allbands)))
+
+        except psycopg2.InternalError as err:
+            print "Caught error {}".format(err)
+            # add to the failed raster to avoid querying this file again...
+            ts.addfailed(date)
+            continue
+
 
         # add single time sample to timeseries
         ts.add(date, labels, raster[0],raster[1], raster[2])
@@ -318,6 +326,9 @@ class TimeSeriesSample():
         self.x60=np.append(self.x60, x60normalized)
         self.meta=np.append(self.meta, date)
         self.y=np.append(self.y, y)
+
+    def addfailed(self,date):
+        self.added = np.append(self.added, date)
 
     def write_to_file(self,filename):
 

@@ -33,3 +33,6 @@ trainvalidevaltable="tiles"
 footpringtable="footprints"
 
 tilesize=120
+
+tiletable=tiles480
+tilefolder=$project/data/bavaria/tiles

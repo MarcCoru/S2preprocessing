@@ -34,7 +34,6 @@ def main():
 
     cfg = ConfigObj(cfg_path)
 
-    print
     conn = psycopg2.connect('postgres://{}:{}@{}/{}'.format(os.environ["POSTGIS_USER"],os.environ["POSTGIS_PASSWORD"],cfg['dbhost'],cfg['dbase']))
 
     level = args.level
@@ -62,6 +61,10 @@ def main():
 
     tileids = ids.values
     for tileid in tileids:
+        conn = psycopg2.connect(
+            'postgres://{}:{}@{}/{}'.format(os.environ["POSTGIS_USER"], os.environ["POSTGIS_PASSWORD"], cfg['dbhost'],
+                                            cfg['dbase']))
+
         print "{} downloading Tile {}".format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), tileid)
         download_tile(conn, level, rastertable, tiletable, outfolder, tileid,False)
 

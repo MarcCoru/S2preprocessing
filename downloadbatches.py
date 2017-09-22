@@ -106,7 +106,9 @@ def download_tile(conn, level, rastertable, tiletable, outfolder, tileid, verbos
                 allbands = bandcfg[level][rtype]
                 raster.append(queryRaster(conn, rastertable, tiletable, tileid, date, rtype, level, toidx(allbands)))
 
-        except psycopg2.InternalError as err:
+        except psycopg2.InternalError,TypeError as err:
+            # TypeError: typically Label query returns None
+            # InternalError: ?? happenes on some tiles. Maybe connection interupted
             print "Caught error {}".format(err)
             # add to the failed raster to avoid querying this file again...
             ts.addfailed(date)

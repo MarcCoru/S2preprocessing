@@ -27,7 +27,7 @@ def main():
         description='created pickle files based on tiles in raster database')
     parser.add_argument('site', help='config file for specified site')
     parser.add_argument('level', help="either L1C or L2A")
-    parser.add_argument('--subset', help="split 'n/m' tile ids in m subsets and only process the n subset")
+    parser.add_argument('--subset', help="split 'n/m' tile ids in m subsets and only process the n subset e.g. 1/5 to 4/5")
     args = parser.parse_args()
 
     cfg_path = args.site
@@ -55,7 +55,8 @@ def main():
 
         c = pd.cut(ids, m,labels=range(m))
 
-        ids=ids.loc[c.loc[c==n].index]
+        # n-1 as index starts from 0
+        ids=ids.loc[c.loc[c==n-1].index]
 
         print "using subset {} of {}: length {}".format(n, m, len(ids))
 

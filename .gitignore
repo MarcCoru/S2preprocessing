@@ -7,6 +7,10 @@ conda
 
 data
 
+*.log
+
+*.swp
+
 gdal-2.2.1
 
 .idea

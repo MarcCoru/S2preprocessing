@@ -42,7 +42,6 @@ do
     # find product's main xml file:
     #  -> list directory filter by regex, return first match
     file=$(ls $path/$product.SAFE | grep -E -m 1 "(S2.*xml|MTD.*xml)")
-
     $gdalwarp -of GTiff -crop_to_cutline -cutline $cutline "$gdalS2prefix:$path/$product.SAFE/$file:10m:$srs" "$tifpath/$product"_10m.tif
     $gdalwarp -of GTiff -crop_to_cutline -cutline $cutline "$gdalS2prefix:$path/$product.SAFE/$file:20m:$srs" "$tifpath/$product"_20m.tif
     $gdalwarp -of GTiff -crop_to_cutline -cutline $cutline "$gdalS2prefix:$path/$product.SAFE/$file:60m:$srs" "$tifpath/$product"_60m.tif

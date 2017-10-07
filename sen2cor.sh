@@ -8,32 +8,30 @@
 # read configs
 . $1
 
-L2AProcess="Sen2Cor-2.4.0-Linux64/bin/L2A_Process"
+# deleteflag -delete
+delflag=$2
 
-fastskipmode=1
+L2AProcess="Sen2Cor-2.4.0-Linux64/bin/L2A_Process"
 
 # default to project root config file if not set
 if [ -z "$L2A_GIPP_path" ]; then
     L2A_GIPP_path=$project/cfg/L2A_GIPP.xml
 fi
 
-# for every line in the results file
-cat $path/$queryfile | while read product
+# for every line in the results file shuf shuffles sequence such that multiple processes will process a different sequence
+cat $path/sen2cor.todo | shuf | while read product
 do
 
     L2Aproductname=$(echo $product | sed 's/MSIL1C/MSIL2A/g' | sed 's/OPER/USER/g' )
 
-    echo $L2Aproductname
-
-    if [ ! -d $path/$product.SAFE ]; then # target folder exists
-        echo "source product $product does not exist -> skipping"
-    elif [ -d $path/$L2Aproductname.SAFE ]  && [ -z $fastskipmode ]; then # target folder exists
-        echo "target product: $L2Aproductname already exists -> skipping"
-    else # do sen2cor process in different threads
-        echo "sen2cor: "$product" -> "$L2Aproductname
-        echo "$L2AProcess $path/$product.SAFE --GIP_L2A $L2A_GIPP_path > $path/$L2Aproductname.sen2cor"
-        $L2AProcess $path/$product.SAFE --GIP_L2A $L2A_GIPP_path > $path/$L2Aproductname.sen2cor
+    if [ "$delflag" = "-delete" ]; then 
+        echo "deleting previous $L2Aproductname.SAFE" 
+        rm -r $path/$L2Aproductname.SAFE
     fi
+
+    echo "sen2cor: "$product" -> "$L2Aproductname
+    #echo "$L2AProcess $path/$product.SAFE --GIP_L2A $L2A_GIPP_path > $path/$L2Aproductname.sen2cor"
+    $L2AProcess $path/$product.SAFE --GIP_L2A $L2A_GIPP_path > $path/$L2Aproductname.sen2cor
 done
 
 # delete folders of unsuccessfull processes (but leave log files)

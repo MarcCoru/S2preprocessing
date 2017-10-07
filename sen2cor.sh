@@ -8,8 +8,8 @@
 # read configs
 . $1
 
-# deleteflag -delete
-delflag=$2
+# flag -delete for deletion of previous step or -single
+flag=$2
 
 L2AProcess="Sen2Cor-2.4.0-Linux64/bin/L2A_Process"
 
@@ -24,7 +24,7 @@ do
 
     L2Aproductname=$(echo $product | sed 's/MSIL1C/MSIL2A/g' | sed 's/OPER/USER/g' )
 
-    if [ "$delflag" = "-delete" ]; then 
+    if [ "$flag" = "-delete" ]; then 
         echo "deleting previous $L2Aproductname.SAFE" 
         rm -r $path/$L2Aproductname.SAFE
     fi
@@ -32,6 +32,12 @@ do
     echo "sen2cor: "$product" -> "$L2Aproductname
     #echo "$L2AProcess $path/$product.SAFE --GIP_L2A $L2A_GIPP_path > $path/$L2Aproductname.sen2cor"
     $L2AProcess $path/$product.SAFE --GIP_L2A $L2A_GIPP_path > $path/$L2Aproductname.sen2cor
+
+    # stop loop after one image
+    if [ "$flag" = "-single" ]; then 
+        break
+    fi
+
 done
 
 # delete folders of unsuccessfull processes (but leave log files)

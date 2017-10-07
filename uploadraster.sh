@@ -14,11 +14,14 @@ fi
 # either L1C or L2A
 level=$2
 
+
+psql -d $dbase -c "Create table if not exists $dbtable(rid serial primary key, rast raster, filename text);"
+
 # database connection
 psql="psql -d $dbase --username=russwurm --host=$dbhost"
 
 # check if table already exists
-if [ $( $psql -tAc "SELECT 1 FROM pg_tables where tablename='$dbtable'" ) = '1' ]; then
+if [ $($psql -tAc "SELECT 1 FROM pg_tables where tablename='$dbtable'") = '1' ]; then
     echo "appending to DB"
     appendflag="-a"
 else

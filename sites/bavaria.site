@@ -14,7 +14,10 @@ enddate="2017-09-11"
 queryfile=bavaria.query
 #L1C=$project/data/bavaria/data/L1Czip
 #L1C=$project/data/bavaria/data/L1C
-path=$project/data/bavaria/data/L1C
+path=$project/data/bavaria/SAFE
+
+# sen2cor target directory
+export L2ATARGET=$path
 
 # warp
 tifpath=$project/data/bavaria/tif

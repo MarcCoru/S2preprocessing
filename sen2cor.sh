@@ -27,10 +27,11 @@ do
 
     if [ ! -d $path/$product.SAFE ]; then # target folder exists
         echo "source product $product does not exist -> skipping"
-    elif [[ -d $path/$L2Aproductname.SAFE ]] && [[ $fastskipmode -eq 1 ]]; then # target folder exists
+    elif [ -d $path/$L2Aproductname.SAFE ]  && [ -z $fastskipmode ]; then # target folder exists
         echo "target product: $L2Aproductname already exists -> skipping"
     else # do sen2cor process in different threads
         echo "sen2cor: "$product" -> "$L2Aproductname
+        echo "$L2AProcess $path/$product.SAFE --GIP_L2A $L2A_GIPP_path > $path/$L2Aproductname.sen2cor"
         $L2AProcess $path/$product.SAFE --GIP_L2A $L2A_GIPP_path > $path/$L2Aproductname.sen2cor
     fi
 done

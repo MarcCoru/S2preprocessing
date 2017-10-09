@@ -4,6 +4,7 @@ import glob
 from os.path import join
 import pandas as pd
 import argparse
+from progressbar import *               # just a simple progress bar
 
 
 def main():
@@ -37,6 +38,7 @@ def print_status(cfg,status_df):
     print
     print "Processing Level L1C:"
     print "  {} SAFE products".format(status_df[status_df["L1C"]].shape[0])
+    print "  {} SAFE products without Granules".format(status_df[status_df["nogranules"]].shape[0])
     print "    {} tif 10m products".format(status_df[status_df["L1Ctif10"]].shape[0])
     print "    {} tif 20m products".format(status_df[status_df["L1Ctif20"]].shape[0])
     print "    {} tif 60m products".format(status_df[status_df["L1Ctif60"]].shape[0])
@@ -75,11 +77,26 @@ def look_for_products(cfg):
     # create empty dataframe
     df = pd.DataFrame(index=queries)
 
+    widgets = ['looking for products: ', Percentage(), ' ', Bar(marker='#', left='[', right=']'),
+               ' ', ETA()]  # see docs for other options
+
+    pbar = ProgressBar(widgets=widgets, maxval=df.shape[0])
+    pbar.start()
+
     # for each product in queryfile
+    i = 0
     for product, row in df.iterrows():
+        pbar.update(i)
+        i+=1
         # check if L1C product exists in $path
         df.loc[product, "L1C"] = os.path.exists(
             join(cfg["path"], product + ".SAFE"))
+
+        # check if product has no granules
+        if os.path.exists(join(cfg["path"], product + ".SAFE", "GRANULE")):
+            df.loc[product, "nogranules"] = len(os.listdir(join(cfg["path"], product + ".SAFE", "GRANULE")))==0
+        else: # if no product in present give benefit of doubt
+            df.loc[product, "nogranules"] = False
 
         # check if L2A product exists in $path
         df.loc[product, "L2A"] = os.path.exists(
@@ -101,6 +118,7 @@ def look_for_products(cfg):
         df.loc[product, "L2Atif60"] = os.path.exists(
             join(cfg["tifpath"], l1ctol2a(product) + "_60m.tif"))
 
+    pbar.finish()
     return df
 
 
@@ -122,6 +140,9 @@ def append_todos(df):
         df.loc[product, "do_cropL2A"] = row["L2A"] and (
             not row["L2Atif10"] or not row["L2Atif20"] or not row["L2Atif60"])
 
+        # do download if not already downloaded (in L1C) and if not marked as nogranules
+        df.loc[product, "do_download"] = not row["L1C"] and not row["nogranules"]
+
     return df
 
 
@@ -135,8 +156,10 @@ def write_status_and_todos(cfg, df):
     write(list(df[df['do_sen2cor']].index), join(cfg["path"], "sen2cor.todo"))
     write(list(df[df['do_cropL1C']].index), join(cfg["path"], "cropL1C.todo"))
     write(list(df[df['do_cropL2A']].index), join(cfg["path"], "cropL2A.todo"))
+    write(list(df[df['do_download']].index), join(cfg["path"], "download.todo"))
 
     df.to_csv(join(cfg["path"], "status.csv"))
+
 
 if __name__ == '__main__':
     main()

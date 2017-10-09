@@ -10,7 +10,7 @@ granules="32UPU 32UQU 33UTP 33UUP"
 
 maxcloud=80
 startdate="2016-01-01"
-enddate="2017-09-11"
+enddate="2017-10-09"
 queryfile=bavaria.query
 #L1C=$project/data/bavaria/data/L1Czip
 #L1C=$project/data/bavaria/data/L1C

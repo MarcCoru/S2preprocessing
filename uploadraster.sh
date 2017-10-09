@@ -56,7 +56,8 @@ do
       continue
     fi
     echo "loading $p to database"
-    raster2pgsql -s $srs $appendflag -P -C -M $tifpath/$product*.tif -F -t $tilesize"x"$tilesize $dbtable | $psql
+    raster2pgsql -s $srs $appendflag -P $tifpath/$product*.tif -F -t $tilesize"x"$tilesize $dbtable | $psql
+    #raster2pgsql -s $srs $appendflag -P -C -M $tifpath/$product*.tif -F -t $tilesize"x"$tilesize $dbtable > uploadsql/$product.sql
 done <$path/$queryfile
 # type := 10m, 20m, 60m or SCL
 

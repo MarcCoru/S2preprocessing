@@ -128,17 +128,17 @@ def append_todos(df):
         # do sen2cor if L1C exists and no L2A
         #df.loc[product,"do_sen2cor"]=row["L1C"] and not row["L2A"]
 
-        # do sen2cor if L1C exists and one of the L2A tif files does not exists
-        df.loc[product, "do_sen2cor"] = row["L1C"] and (
-            not row["L2Atif10"] or not row["L2Atif20"] or not row["L2Atif60"])
+
+        tifmissing=not row["L2Atif10"] or not row["L2Atif20"] or not row["L2Atif60"]
+
+        # do sen2cor if L1C exists and at least one tif missing and the product is not empty 
+        df.loc[product, "do_sen2cor"] = row["L1C"] and tifmissing and not row["nogranules"]
 
         # do crop L1C
-        df.loc[product, "do_cropL1C"] = row["L1C"] and (
-            not row["L1Ctif10"] or not row["L1Ctif20"] or not row["L1Ctif60"])
+        df.loc[product, "do_cropL1C"] = row["L1C"] and tifmissing and not row["nogranules"]
 
         # do crop L1C
-        df.loc[product, "do_cropL2A"] = row["L2A"] and (
-            not row["L2Atif10"] or not row["L2Atif20"] or not row["L2Atif60"])
+        df.loc[product, "do_cropL2A"] = row["L2A"] and tifmissing and not row["nogranules"]
 
         # do download if not already downloaded (in L1C) and if not marked as nogranules
         df.loc[product, "do_download"] = not row["L1C"] and not row["nogranules"]

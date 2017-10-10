@@ -4,7 +4,11 @@
 # read configs
 . $1
 
-cat $path/$queryfile | while read product
+numdownload=$(cat $path/download.todo | wc -l)
+
+echo "downloading "$numdownload" products"
+
+cat $path/download.todo | while read product
 do
 
     if [ ! -d $path/$product.SAFE ]; then

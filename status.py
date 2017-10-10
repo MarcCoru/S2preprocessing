@@ -1,3 +1,4 @@
+
 from configobj import ConfigObj
 import os
 import glob
@@ -35,10 +36,10 @@ def main():
 
 def print_status(cfg,status_df):
     print "Found {} queried products".format(status_df.shape[0])
+    print "{} SAFE products are without Granules".format(status_df[status_df["nogranules"]].shape[0])
     print
     print "Processing Level L1C:"
     print "  {} SAFE products".format(status_df[status_df["L1C"]].shape[0])
-    print "  {} SAFE products without Granules".format(status_df[status_df["nogranules"]].shape[0])
     print "    {} tif 10m products".format(status_df[status_df["L1Ctif10"]].shape[0])
     print "    {} tif 20m products".format(status_df[status_df["L1Ctif20"]].shape[0])
     print "    {} tif 60m products".format(status_df[status_df["L1Ctif60"]].shape[0])
@@ -62,6 +63,7 @@ def print_status(cfg,status_df):
     print join(cfg["path"],"sen2cor.todo")
     print join(cfg["path"],"cropL1C.todo")
     print join(cfg["path"],"cropL2A.todo")
+    print join(cfg["path"],"download.todo")
 
 def look_for_products(cfg):
 
@@ -88,15 +90,16 @@ def look_for_products(cfg):
     for product, row in df.iterrows():
         pbar.update(i)
         i+=1
-        # check if L1C product exists in $path
-        df.loc[product, "L1C"] = os.path.exists(
-            join(cfg["path"], product + ".SAFE"))
 
         # check if product has no granules
         if os.path.exists(join(cfg["path"], product + ".SAFE", "GRANULE")):
             df.loc[product, "nogranules"] = len(os.listdir(join(cfg["path"], product + ".SAFE", "GRANULE")))==0
         else: # if no product in present give benefit of doubt
             df.loc[product, "nogranules"] = False
+
+        # check if L1C product exists in $path
+        df.loc[product, "L1C"] = os.path.exists(
+            join(cfg["path"], product + ".SAFE")) and not df.loc[product, "nogranules"]
 
         # check if L2A product exists in $path
         df.loc[product, "L2A"] = os.path.exists(
@@ -129,16 +132,17 @@ def append_todos(df):
         #df.loc[product,"do_sen2cor"]=row["L1C"] and not row["L2A"]
 
 
-        tifmissing=not row["L2Atif10"] or not row["L2Atif20"] or not row["L2Atif60"]
+        tifmissingL2A=not row["L2Atif10"] or not row["L2Atif20"] or not row["L2Atif60"]
+        tifmissingL1C=not row["L1Ctif10"] or not row["L1Ctif20"] or not row["L1Ctif60"]
 
         # do sen2cor if L1C exists and at least one tif missing and the product is not empty 
-        df.loc[product, "do_sen2cor"] = row["L1C"] and tifmissing and not row["nogranules"]
+        df.loc[product, "do_sen2cor"] = row["L1C"] and tifmissingL2A and not row["nogranules"]
 
         # do crop L1C
-        df.loc[product, "do_cropL1C"] = row["L1C"] and tifmissing and not row["nogranules"]
+        df.loc[product, "do_cropL1C"] = row["L1C"] and tifmissingL1C
 
         # do crop L1C
-        df.loc[product, "do_cropL2A"] = row["L2A"] and tifmissing and not row["nogranules"]
+        df.loc[product, "do_cropL2A"] = row["L2A"] and tifmissingL2A
 
         # do download if not already downloaded (in L1C) and if not marked as nogranules
         df.loc[product, "do_download"] = not row["L1C"] and not row["nogranules"]

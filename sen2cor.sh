@@ -29,7 +29,7 @@ do
         rm -r $path/$L2Aproductname.SAFE
     fi
 
-    echo "sen2cor: "$product" -> "$L2Aproductname
+    echo $(echo date "+%Y-%m-%d %H:%M:%S")" sen2cor: "$product" -> "$L2Aproductname
     #echo "$L2AProcess $path/$product.SAFE --GIP_L2A $L2A_GIPP_path > $path/$L2Aproductname.sen2cor"
     $L2AProcess $path/$product.SAFE --GIP_L2A $L2A_GIPP_path > $path/$L2Aproductname.sen2cor
 

@@ -6,8 +6,8 @@ Preprocessing steps
 * query
 * download
 * atmospheric correction
-* conversion to .tif (tbd)
-* upload to DB (tbd)
+* conversion to .tif
+* upload to postgresql db DB
 
 project emerged from thesis repository
 
@@ -15,8 +15,20 @@ project emerged from thesis repository
 
 clone repository
 ```bash
-$git clone git@gitlab.lrz.de:ga73yox/preprocessing.git
-$sh setup.sh
+git clone https://github.com/MarcCoru/S2preprocessing.git
+sh setup.sh
+```
+
+## Dependencies
+
+satellite data query
+```
+https://github.com/kraftek/awsdownload/releases/download/1.7/ProductDownload-1.7
+```
+
+satellite data download
+```
+https://github.com/sentinel-hub/sentinelhub-py
 ```
 
 ## Pipeline
@@ -24,7 +36,7 @@ $sh setup.sh
 ##### Query available products from Amazon Web Service (AWS)
 
 ```bash
-$sh query.sh sites/munich.site
+sh query.sh sites/munich.site
 ```
 
 creates ```$queryfile``` containing product names
@@ -32,20 +44,20 @@ creates ```$queryfile``` containing product names
 ##### Download products from $queryfile
 
 ```bash
-$sh download.sh sites/munich.site
+sh download.sh sites/munich.site
 ```
 
 ##### Optional: Delete unnecessary tiles to reduce file size and processing time
 
 ```bash
-$python delGranules.py sites/munich.site
+python delGranules.py sites/munich.site
 ```
 
 Dry run flag ```-d``` only simulates deletion
 
 ```bash
- $python delGranules.py sites/munich.site -d
- ```
+python delGranules.py sites/munich.site -d
+```
 
 
 the config file must include a ```granules``` variable
@@ -59,7 +71,7 @@ granules="32UPU 32UQU 33UTP 33UUP"
 ##### Atmospheric correction with Sen2Cor
 
 ```bash
-$sh sen2cor.sh sites/munich.site
+sh sen2cor.sh sites/munich.site
 ```
 
 The Sentinel 2 atomspheric correction config file ```L2A_GIPP.xml``` is by

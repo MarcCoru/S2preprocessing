@@ -1,22 +1,21 @@
-# Preprocessing Pipeline
+# Sentinel 2 preprocessing Pipeline
 
-Sentinel 2
+This repository is a collection of bash and python scripts for
+query, download and upload (to local postgresql db) of Sentinel 2 images
+in the scope of my Master Thesis
 
-Preprocessing steps
-* query
-* download
-* atmospheric correction
-* conversion to .tif
-* upload to postgresql db DB
-
-project emerged from thesis repository
+Processing steps
+* query (with awsdownload)
+* download (with sentinelhub)
+* (optional) atmospheric correction (sen2cor)
+* conversion to .tif (with GDAL)
+* upload to PostgreSQL+PostGIS
 
 ## Installation
 
 clone repository
 ```bash
 git clone https://github.com/MarcCoru/S2preprocessing.git
-sh setup.sh
 ```
 
 ## Dependencies
@@ -78,9 +77,9 @@ The Sentinel 2 atomspheric correction config file ```L2A_GIPP.xml``` is by
 default stored in the project root directory.
 However, the location can be changed in the config file using the ```L2A_GIPP_path``` variable
 
-## DB
+## PostgresSQL
 
-addTrainEval site
+### Scripts
 
 Add a "is evaluate" column to a polygon dataset
 ```bash
@@ -92,17 +91,16 @@ Add a "is train" column to a polygon dataset (eval=1 are excluded)
 sh addEvalField.sh sites/bavaria.site tiles train "0.75" "where eval=0"
 ```
 
-# GDAL drivers must be enables:
-enable via (as sudo user: ```$sudo -u postgres -d fields```)
+### PostGIS extension
+
+enable gdal drivers via (as sudo user: ```$sudo -u postgres -d <database>```)
 ```
 SET postgis.gdal_enabled_drivers = 'ENABLE_ALL';
 ALTER SYSTEM SET postgis.gdal_enabled_drivers TO 'GTiff PNG JPEG';
 SELECT pg_reload_conf();
 ```
 
-test if enabled via
+test if drivers are enabled via
 ```
 SELECT short_name, long_name FROM ST_GDALDrivers();
 ```
-
-### Sentinel 2 Bands
